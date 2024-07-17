@@ -1,0 +1,203 @@
+[gd_scene load_steps=20 format=3 uid="uid://bnwrplmxh22ux"]
+
+[ext_resource type="Script" path="res://2D Silhouette/Player.gd" id="1_tk4an"]
+[ext_resource type="Texture2D" uid="uid://b78n52egpvctt" path="res://2D Silhouette/DinoSprites - doux.png" id="2_oqult"]
+[ext_resource type="Texture2D" uid="uid://dm1x3ojmhk0km" path="res://2D Silhouette/DinoSprites - doux Mask.png" id="3_m0vi1"]
+[ext_resource type="Script" path="res://2D Silhouette/FollowParentSprite.gd" id="4_i1p3s"]
+[ext_resource type="Texture2D" uid="uid://bwutayq82ytam" path="res://2D Silhouette/Puff.png" id="5_bw742"]
+[ext_resource type="AudioStream" uid="uid://se4qhhhn6s3h" path="res://2D Silhouette/sfx_movement_footsteps1a.wav" id="6_lqpay"]
+[ext_resource type="AudioStream" uid="uid://cv0hcxdhgj7yb" path="res://2D Silhouette/sfx_movement_footsteps1b.wav" id="7_r30hk"]
+[ext_resource type="AudioStream" uid="uid://dt7jhsxnvhf8n" path="res://2D Silhouette/sfx_movement_jump13_landing.wav" id="8_w67vc"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4ek42"]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6yv1l"]
+blend_mode = 2
+
+[sub_resource type="Animation" id="Animation_wpoch"]
+resource_name = "Jump"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [10, 11, 12]
+}
+
+[sub_resource type="Animation" id="Animation_mlwjd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_6lfbb"]
+resource_name = "Run"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7, 8, 9]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Step1")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Step2")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [0.0],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_ktnns"]
+resource_name = "Stand"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wmrhf"]
+_data = {
+"Jump": SubResource("Animation_wpoch"),
+"RESET": SubResource("Animation_mlwjd"),
+"Run": SubResource("Animation_6lfbb"),
+"Stand": SubResource("Animation_ktnns")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y60qm"]
+size = Vector2(13, 20)
+
+[sub_resource type="Curve" id="Curve_ours7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.91632, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hrvxg"]
+curve = SubResource("Curve_ours7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rot7w"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(4, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+gravity = Vector3(0, 0, 0)
+scale_min = 0.0
+scale_curve = SubResource("CurveTexture_hrvxg")
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+texture_filter = 1
+collision_mask = 2
+script = ExtResource("1_tk4an")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
+limit_left = 0
+limit_top = 0
+limit_right = 1152
+limit_bottom = 648
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_oqult")
+offset = Vector2(0, 1)
+hframes = 24
+
+[node name="Mask1" type="Sprite2D" parent="Sprite2D"]
+modulate = Color(1, 0.921569, 0.176471, 1)
+z_index = 1
+texture_filter = 1
+material = SubResource("CanvasItemMaterial_4ek42")
+texture = ExtResource("3_m0vi1")
+offset = Vector2(0, 1)
+hframes = 24
+script = ExtResource("4_i1p3s")
+
+[node name="Mask2" type="Sprite2D" parent="Sprite2D"]
+modulate = Color(1, 0.921569, 0.176471, 1)
+z_index = 1000
+texture_filter = 1
+material = SubResource("CanvasItemMaterial_6yv1l")
+texture = ExtResource("3_m0vi1")
+offset = Vector2(0, 1)
+hframes = 24
+script = ExtResource("4_i1p3s")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_wmrhf")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_y60qm")
+
+[node name="RunPuffs" type="GPUParticles2D" parent="."]
+position = Vector2(0, 9)
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_rot7w")
+texture = ExtResource("5_bw742")
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.74
+
+[node name="Step1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_lqpay")
+volume_db = -15.928
+
+[node name="Step2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_r30hk")
+volume_db = -15.928
+
+[node name="Jump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_w67vc")
+volume_db = -5.474
