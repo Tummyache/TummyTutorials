@@ -153,7 +153,7 @@ offset = Vector2(0, 1)
 hframes = 24
 
 [node name="Mask1" type="Sprite2D" parent="Sprite2D"]
-modulate = Color(1, 0.921569, 0.176471, 1)
+modulate = Color(0.231373, 0.211765, 0.0392157, 1)
 z_index = 1
 texture_filter = 1
 material = SubResource("CanvasItemMaterial_4ek42")
@@ -163,7 +163,7 @@ hframes = 24
 script = ExtResource("4_i1p3s")
 
 [node name="Mask2" type="Sprite2D" parent="Sprite2D"]
-modulate = Color(1, 0.921569, 0.176471, 1)
+modulate = Color(0.231373, 0.211765, 0.0392157, 1)
 z_index = 1000
 texture_filter = 1
 material = SubResource("CanvasItemMaterial_6yv1l")
